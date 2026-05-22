@@ -3,9 +3,20 @@
   "version": "1.0.0",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-builder"
   },
   "devDependencies": {
-    "electron": "^42.2.0"
+    "electron": "^42.2.0",
+    "electron-builder": "^26.8.1"
+  },
+
+  "build": {
+  "appId": "com.manya.pocket",
+  "productName": "pocket",
+  "icon": "build/icon.ico",
+  "win": {
+    "target": "nsis"
   }
+}
 }
