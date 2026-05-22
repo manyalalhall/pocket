@@ -1,0 +1,90 @@
+* {
+  box-sizing: border-box;
+}
+
+
+body {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+
+  background-image: url("./assets/jean.jpeg");
+  background-size:cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  user-select: none;
+  -webkit-app-region: drag;
+}
+
+.app p {
+  position:absolute;
+  top:30px;
+  left:50px;
+  font-size:25.5px;
+  font-family: "Goudy Stout";
+  color:rgb(231, 223, 151);
+  margin:0;
+}
+
+button,
+input,
+textarea,
+select {
+  -webkit-app-region: no-drag;
+  cursor: pointer;
+}
+
+.wallet{
+    width:250px;
+    height:250px;
+    background-image: url("./assets/wallet.png");
+    background-size:contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    position:absolute;
+    top:170px;
+    left:20px;
+
+    cursor:pointer;
+    -webkit-app-region:no-drag;
+}
+
+.modal{
+    display:none;
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background:white;
+    border-radius: 12px;
+    padding:20px;
+    width:250px;
+    height:250px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    z-index:10;
+    overflow-y: auto;
+}
+
+#closeBtn{
+    float: right;
+    background: none;
+    border: none;
+    font-size: 16px;
+}
+
+#imageInput {
+  display: block;
+  margin-top: 10px;
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+}
+
+#imageDisplay {
+  cursor: pointer;
+}
+
+.modal-content {
+  cursor: pointer;
+  -webkit-app-region: no-drag;
+}
