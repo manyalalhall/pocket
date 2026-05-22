@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   let images = [];
   let currentIndex = 0;
 
@@ -8,7 +8,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('imageInput');
   const addPicturesBtn = document.getElementById('addPicturesBtn');
 
-  // Open file picker when Add Pictures is clicked
+  // load saved images on startup
+  images = await window.electronAPI.loadImages();
+  if (images.length > 0) showImage();
+
   addPicturesBtn.addEventListener('click', () => {
     input.click();
   });
@@ -24,11 +27,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   input.addEventListener('change', () => {
     const files = Array.from(input.files);
-    files.forEach((file, i) => {
+    files.forEach((file) => {
       const reader = new FileReader();
-      reader.onload = (e) => {
-        images.push(e.target.result); // keeps adding to existing images
-        if (images.length === 1) showImage(); // show first image if none before
+      reader.onload = async (e) => {
+        const base64 = e.target.result.split(',')[1]; // strip the data:image/...;base64, part
+        const name = `${Date.now()}-${file.name}`; // unique filename
+        await window.electronAPI.saveImage(name, base64); // save to disk
+        images.push(e.target.result);
+        if (images.length === 1) showImage();
       };
       reader.readAsDataURL(file);
     });
@@ -51,4 +57,39 @@ document.addEventListener('DOMContentLoaded', () => {
       modal.style.display = 'none';
     }
   });
+
+  // make all icons draggable
+    document.querySelectorAll('.draggable-icon').forEach(icon => {
+        let offsetX, offsetY;
+
+        icon.addEventListener('mousedown', (e) => {
+         offsetX = e.clientX - icon.getBoundingClientRect().left;
+        offsetY = e.clientY - icon.getBoundingClientRect().top;
+
+        function onMouseMove(e) {
+            const iconW = icon.offsetWidth;
+            const iconH = icon.offsetHeight;
+  
+            const margin = 0.5;
+            const maxX = window.innerWidth - iconW * margin;
+            const maxY = window.innerHeight - iconH * margin;
+            const minX = -iconW * margin;
+            const minY = -iconH * margin;
+
+            const newX = Math.min(Math.max(minX, e.clientX - offsetX), maxX);
+            const newY = Math.min(Math.max(minY, e.clientY - offsetY), maxY);
+
+            icon.style.left = `${newX}px`;
+            icon.style.top = `${newY}px`;
+        }
+
+        function onMouseUp() {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+        }
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    });
+    });
 });
